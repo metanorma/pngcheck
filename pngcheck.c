@@ -2,6 +2,14 @@
  * pngcheck:  Authenticate the structure of a PNG file and dump info about
  *            it if desired.
  *
+ * landfillbaby's fork
+ * LUCY TODO: remove JNG and MNG. vim search:
+ * /\v[jmJM][nN][gG]|<([JM]HDR|JDAT|JSEP|DHDR|FRAM|SAVE|SEEK|nEED|DEFI|BACK|MOVE|CLON|SHOW|CLIP|LOOP|ENDL|PROM|fPRI|eXPI|BASI|IPNG|PPLT|PAST|TERM|DISC|pHYg|DROP|DBYK|ORDR|MAGN|MEND)>
+ * LUCY TODO: add APNG
+ * LUCY TODO: add ZDoom grAb and alPh
+ * LUCY TODO: optimize stuff (the printf calls seem to be optimized by the compiler?)
+ * LUCY TODO: remove non-zlib code or replace with optimized stuff
+ *
  * This program checks the PNG signature bytes (with tests for various forms
  * of text-mode corruption), chunks (CRCs, dependencies, out-of-range values),
  * and compressed image data (IDAT zlib stream).  In addition, it optionally
@@ -747,19 +755,29 @@ int main(int argc, char *argv[])
 /* GRR 20061203 */
 void usage(FILE *fpMsg)
 {
-  fprintf(fpMsg, "PNGcheck, version %s,\n", VERSION);
-  fprintf(fpMsg, "   by Alexander Lehmann, Andreas Dilger and Greg Roelofs.\n");
+  fprintf(fpMsg, "PNGcheck, version " VERSION ",\n"
+    "   by Alexander Lehmann, Andreas Dilger, Greg Roelofs and Lucy Phipps.\n"
 #ifdef USE_ZLIB
-  fprintf(fpMsg, "   Compiled with zlib %s; using zlib %s.\n",
-    ZLIB_VERSION, zlib_version);
+    "   Compiled with zlib %s; using zlib %s.\n"
 #endif
-
-  fprintf(fpMsg, "\n"
+    "\n"
     "Test PNG, JNG or MNG image files for corruption, and print size/type info."
     "\n\n"
-    "Usage:  pngcheck [-7cpqtv] file.{png|jng|mng} [file2.{png|jng|mng} [...]]\n"
-    "   or:  ... | pngcheck [-7cpqstvx]\n"
-    "   or:  pngcheck [-7cpqstvx] file-containing-PNGs...\n"
+    "Usage:  pngcheck [-7cpqStv"
+#ifdef USE_ZLIB
+    "vw"
+#endif
+    "] file.{png|jng|mng} [file2.{png|jng|mng} [...]]\n"
+    "   or:  ... | pngcheck [-7cpqSstv"
+#ifdef USE_ZLIB
+    "vw"
+#endif
+    "x]\n"
+    "   or:  pngcheck [-7cpqSstv"
+#ifdef USE_ZLIB
+    "vw"
+#endif
+    "x] file-containing-PNGs...\n"
     "\n"
     "Options:\n"
     "   -7  print contents of tEXt chunks, escape chars >=128 (for 7-bit terminals)\n"
@@ -777,6 +795,9 @@ void usage(FILE *fpMsg)
     "   -x  search for PNGs within another file and extract them when found\n"
     "\n"
     "Note:  MNG support is more informational than conformance-oriented.\n"
+#ifdef USE_ZLIB
+    , ZLIB_VERSION, zlib_version
+#endif
   );
 
   fflush(fpMsg);
