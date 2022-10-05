@@ -20,17 +20,9 @@
 
 # macros --------------------------------------------------------------------
 
-#ZPATH = ../zlib
-ZPATH = ../zlib-1.2.11-win64
-ZINC = -I$(ZPATH)
-#ZLIB = $(ZPATH)/libzdll.a #	link dynamically against DLL
-ZLIB = $(ZPATH)/libz.a #	link statically
+LIBS = -l:libz.a
 
-INCS = $(ZINC)
-LIBS = $(ZLIB)
-
-#CC = gcc
-CC = x86_64-w64-mingw32-gcc #	Linux -> Win64 cross-compilation
+CC = gcc
 LD = $(CC)
 RM = rm -f
 CFLAGS = -O -Wall $(INCS) $(MINGW_CCFLAGS) -DUSE_ZLIB
