@@ -12,7 +12,7 @@
 # "c:\windows\command.com /e:4096" as the program command line and set the
 # working directory to this directory.  Then double-click to open the new
 # DOS-prompt window with a bigger environment and retry the commands above.
-# 
+#
 # This makefile assumes zlib has already been built or downloaded and is in
 # a subdirectory at the same level as the current subdirectory (as indicated
 # by the ZPATH macro below).  Edit as appropriate.
@@ -22,7 +22,7 @@
 # linked executables, but that can be changed by uncommenting the appropriate
 # ZLIB lines.
 
-!include <ntwin32.mak>
+#!include <ntwin32.mak>
 
 
 # macros --------------------------------------------------------------------
@@ -81,7 +81,7 @@ $(PROG2)$(E): $(OBJS2)
 $(PROG3)$(E): $(OBJS3)
 	$(CC) $(CFLAGS) -out:$@ $(OBJS3) setargv.obj $(LIBS)
 
-$(PROG)$(O):	gpl/$(PROG).c
+$(PROG)$(O):	$(PROG).c
 $(PROG2)$(O):	gpl/$(PROG2).c
 $(PROG3)$(O):	gpl/$(PROG3).c
 

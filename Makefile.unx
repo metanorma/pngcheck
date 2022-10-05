@@ -18,13 +18,7 @@
 
 # macros --------------------------------------------------------------------
 
-ZPATH = ../zlib
-ZINC = -I$(ZPATH)
-ZLIB = -L$(ZPATH) -lz
-#ZLIB = $(ZPATH)/libz.a
-
-INCS = $(ZINC)
-LIBS = $(ZLIB)
+LIBS = -lz
 
 CC = gcc
 LD = gcc
