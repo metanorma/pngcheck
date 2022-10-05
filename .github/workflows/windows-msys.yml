@@ -1,0 +1,41 @@
+name: Windows-MSys
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  workflow_dispatch:
+
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        msys: [ 'mingw32', 'mingw64' ]
+
+    defaults:
+      run:
+        shell: msys2 {0}
+
+    steps:
+    - name: Setup MSys
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: ${{ matrix.msys }}
+        path-type: minimal
+        update: true
+        install: >-
+          git
+          make
+        pacboy: >-
+          toolchain:p
+          zlib:p
+
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Build
+      run: make -f Makefile.${{ matrix.msys }}
