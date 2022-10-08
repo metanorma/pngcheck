@@ -1,4 +1,10 @@
-pngcheck version 3.0.3 of 25 April 2021
+## metanorma update 3.0.4 of 05 October 2022
+
+Fixed handling of chunks of unknown type.
+According to specifiacation "An unknown chunk type is not treated as an error unless
+it is a critical chunk", so we treat unknown and not critical chunks as a warning
+
+## pngcheck version 3.0.3 of 25 April 2021
 
 This version fixes another (probable) security vulnerability discovered by
 "chiba of topsec alpha lab".  Ben Beasley of the Fedora Linux project fixed
