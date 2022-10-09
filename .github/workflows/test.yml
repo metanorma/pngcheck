@@ -1,0 +1,31 @@
+name: test
+
+on:
+  push:
+    branches:
+      - main
+      - development
+
+  pull_request:
+    paths-ignore:
+      - .github/workflows/release.yml
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            makefile: Makefile.mingw32
+          - os: windows-latest
+            makefile: Makefile.mingw64
+          - os: macos-latest
+            makefile: Makefile.unx
+          - os: ubuntu-latest
+            makefile: Makefile.unx
+    steps:
+      - uses: actions/checkout@v3
+
+      - run: make -f ${{ matrix.makefile }}
