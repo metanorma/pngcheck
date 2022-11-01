@@ -1,0 +1,40 @@
+name: release
+
+on:
+  push:
+    tags:
+    - 'metanorma-v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Release to GitHub
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            Automatic release of ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - run: |
+          git archive head.tar
+          echo pngcheck_sha256=$(sha256sum head.tar | cut -d" " -f1) >> ${GITHUB_ENV}
+
+      - uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.METANORMA_CI_PAT_TOKEN }}
+          repository: metanorma/pngcheck-ruby
+          event-type: metanorma/pngcheck
+          client-payload: |
+            {
+              "ref": "${{ github.ref }}",
+              "sha256": $"{{ env.pngcheck_sha256 }}"
+            }
